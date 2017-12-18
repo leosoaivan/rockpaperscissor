@@ -4,7 +4,13 @@ function computerPlay() {
   return gameChoices[Math.floor(Math.random()*gameChoices.length)];
 }
 
-function beginGame(computerSelection, playerSelection) {
+function playerPlay() {
+  playerSelection = prompt("Choose 'rock', 'paper', or 'scissor.");
+  playerSelection = playerSelection.toLowerCase();
+  return playerSelection;
+}
+
+function playRound(computerSelection, playerSelection) {
   let computerIndex = gameChoices.indexOf(computerSelection);
   let playerIndex = gameChoices.indexOf(playerSelection);
   let results = computerIndex - playerIndex;
@@ -27,10 +33,7 @@ function game() {
   let gameCount = 5;
   
   while (gameCount > 0) {
-    playerSelection = prompt("Choose 'rock', 'paper', or 'scissor.");
-    playerSelection = playerSelection.toLowerCase();
-    
-    beginGame(computerPlay(), playerSelection);
+    playRound(computerPlay(), playerPlay());
     
     gameCount--;
   }

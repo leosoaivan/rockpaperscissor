@@ -6,35 +6,48 @@ function computerPlay() {
 
 function playerPlay() {
   playerSelection = prompt("Choose 'rock', 'paper', or 'scissor.");
-  playerSelection = playerSelection.toLowerCase();
-  return playerSelection;
+  return playerSelection.toLowerCase();
 }
 
 function playRound(computerSelection, playerSelection) {
   let computerIndex = gameChoices.indexOf(computerSelection);
   let playerIndex = gameChoices.indexOf(playerSelection);
-  let results = computerIndex - playerIndex;
-  
-  if (results === 0) {
-    console.log("The computer picked " + computerSelection + ", too.");
-    console.log("You tied!");
+  let comparison = computerIndex - playerIndex;
+  let result;
+
+  if (comparison === 0) {
+    result = "tie";
+  } else if (comparison == -1 || comparison == 2) {
+    result = "win";
   } else {
-    console.log("The computer picked " + computerSelection + ".");
-    if (results == -1 || results == 2) {
-      console.log("You won!");
-    } else {
-      console.log("You lost!");
-    }
-  }
-  console.log("GOOD GAME THO")
+    result = "loss";
+  } return result;
 }
 
 function game() {
   let gameCount = 5;
+  let computerScore = 0;
+  let playerScore = 0;
   
   while (gameCount > 0) {
-    playRound(computerPlay(), playerPlay());
+    let computerSelection = computerPlay();
+    let playerSelection = playerPlay();
+    let roundResult = playRound(computerSelection, playerSelection);
     
+    if (roundResult == "tie") {
+      console.log("The computer picked " + computerSelection + ", too.");
+      console.log("You tied!");
+    } else {
+      console.log("The computer picked " + computerSelection + ".");
+      if (roundResult == "win") {
+        playerScore++;
+        console.log("You won!");
+      } else {
+        computerScore++;
+        console.log("You lost!");
+      }
+    }
+    console.log(`The current score is COMPUTER:${computerScore} and YOU:${playerScore}\n`);
     gameCount--;
   }
 }

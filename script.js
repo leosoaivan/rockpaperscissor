@@ -21,7 +21,9 @@ function playRound(computerSelection, playerSelection) {
     result = "win";
   } else {
     result = "loss";
-  } return result;
+  }
+  
+  return result;
 }
 
 function game() {

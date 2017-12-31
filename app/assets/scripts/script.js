@@ -1,14 +1,42 @@
-const buttons = Array.from(document.querySelectorAll('button'));
 const gameChoices = ["rock", "paper", "scissor"];
+const buttons = Array.from(document.querySelectorAll('button'));
 
-function computerPlay() {
+function playGame() {
+  buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      clearOldMessage();
+      let gameSelections = generateGameSelections(e);
+      let computerSelection = gameSelections["computerSelection"];
+
+      let roundResult = playRound(gameSelections);
+      let messageText = generateMessage(computerSelection, roundResult);
+      
+      addNewMessage("#container", messageText);
+    })
+  })
+}
+
+function clearOldMessage() {
+  let oldMessage = document.querySelector("#message");
+  if (oldMessage) {
+    oldMessage.remove();
+  }
+}
+
+function generateGameSelections(e) {
+  var gameSelections = {
+    "computerSelection": getComputerSelection(),
+    "playerSelection": e.target.value
+  };
+  return gameSelections;
+}
+
+function getComputerSelection() {
   return gameChoices[Math.floor(Math.random()*gameChoices.length)];
 }
 
-function playRound(computerSelection, playerSelection) {
-  let computerIndex = gameChoices.indexOf(computerSelection);
-  let playerIndex = gameChoices.indexOf(playerSelection);
-  let comparison = computerIndex - playerIndex;
+function playRound(selections) {
+  let comparison = compareSelections(selections);
   let result;
 
   if (comparison === 0) {
@@ -20,6 +48,19 @@ function playRound(computerSelection, playerSelection) {
   }
   
   return result;
+}
+
+function compareSelections(selections) {
+  let computerSelection = selections["computerSelection"];
+  let playerSelection = selections["playerSelection"];
+
+  let comparison = returnIndexOf(computerSelection) - returnIndexOf(playerSelection);
+
+  return comparison;
+}
+
+function returnIndexOf(selection) {
+  return gameChoices.indexOf(selection);
 }
 
 function generateMessage(computerSelection, result) {
@@ -34,29 +75,13 @@ function generateMessage(computerSelection, result) {
   }
 }
 
-function clearMessages() {
-  let oldMessage = document.querySelector("#message");
-  if (oldMessage) {
-    oldMessage.remove();
-  }
+function addNewMessage(targetElement, messageText) {
+  const container = document.querySelector(targetElement);
+  const messageDiv = document.createElement('div')
+
+  messageDiv.setAttribute("id", "message");
+  messageDiv.textContent = messageText;
+  container.appendChild(messageDiv);
 }
 
-buttons.forEach((button) => {
-  button.addEventListener('click', (e) => {
-    clearMessages();
-    const container = document.querySelector("#container")
-
-    let computerSelection = computerPlay();
-    let playerSelection = e.target.value;
-    
-    let roundResult = playRound(computerSelection, playerSelection);
-    let messageText = generateMessage(computerSelection, roundResult);
-
-    const messageDiv = document.createElement('div')
-    messageDiv.setAttribute("id", "message");
-
-    messageDiv.textContent = messageText;
-
-    container.appendChild(messageDiv);
-  })
-})
+playGame();
